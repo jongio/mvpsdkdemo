@@ -30,6 +30,7 @@ namespace mvpsdkdemoapi
 
             services.AddAzureClients(builder =>
             {
+                
                 builder.AddBlobServiceClient(new Uri(Environment.GetEnvironmentVariable("AZURE_STORAGE_BLOB_URL")))
                     .ConfigureOptions((options, provider) =>
                     {
