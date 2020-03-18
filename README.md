@@ -18,9 +18,9 @@ https://aka.ms/azcliget
 
 `az account set -n {SUBSCRIPTION_NAME}`
 
-Get account list with `az account list`
+Get subscription list with `az account list`
 
-See current account with `az account show`
+See current selected/default subscription with `az account show`
 
 ### Create Resource Group
 
@@ -92,11 +92,13 @@ The code reads the storage account name from an environment variable named `AZUR
 
 `az storage account show -n {STORAGE_NAME} --query primaryEndpoints.blob -o tsv`
 
-### Set environment variable
+### Set blob url
+
+> Only required if the storage account name is different than what is checked in.
 
 1. Open project folder `src/mvpsdkdemoconsole` in VS Code.
-1. Open `src/mvpsdkdemoconsole/.env`
-1. Set the AZURE_STORAGE_BLOB_URL variable to the full storage account blob url.
+1. Open `src/mvpsdkdemoconsole/Program.cs`
+1. Set the `blobServiceUri` variable to the full storage account blob url.
 
 ### Azure CLI Login
 
@@ -114,7 +116,7 @@ The code reads the storage account name from an environment variable named `AZUR
 
 ### Get the storage account blob url
 
-1. `az storage account show -n {STORAGE_NAME} --query primaryEndpoints.blob -o tsv`
+`az storage account show -n {STORAGE_NAME} --query primaryEndpoints.blob -o tsv`
 
 ### Set environment variable
 
@@ -123,8 +125,29 @@ The code reads the storage account name from an environment variable named `AZUR
 1. Set `configurations/env/AZURE_STORAGE_BLOB_URL` to storage account blob url.
 1. Save the file.
 
-## Run App
+### Run App Locally
 
 1. Hit F5
+1. View the Output in Browser.
+1. View the Output in VS Code Output Console.
+1. Show that Azure CLI Credential was used.
+1. Show the custom pipeline log entries.
 
-## Deploy to Azure
+### Deploy to Azure
+
+1. Open the VS Code Azure Extension.
+1. Under APP SERVICE, right-click on your app and select 'Deploy to Web App'.
+
+### Start Log Streaming
+
+1. Open the VS Code Azure Extension.
+1. Under APP SERVICE, right-click on your app and select 'Start Streaming Logs'
+
+### Run App on Azure
+
+1. Open a browser and hit the web api URL: https://mvpsdkdemoapp.azurewebsites.net/api/blobber or https://{APP_NAME}.azurewebsites.net/api/blobber
+1. View the output in the browser.
+
+### View the Log Stream
+
+1. Back to VS Code, go to the log stream and show that the policy logs are there and that Managed Identity was successfully used.

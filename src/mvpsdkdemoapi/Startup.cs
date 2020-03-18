@@ -1,13 +1,10 @@
 using System;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 using Azure.Core;
-
 using Azure.Identity;
 
 namespace mvpsdkdemoapi
@@ -21,16 +18,16 @@ namespace mvpsdkdemoapi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
+            // 1. Add Tracing policies via AddSingleton
             services.AddSingleton<SimpleTracingPolicy>();
 
+            // 2. Add Azure SDK clients via AddAzureClients
             services.AddAzureClients(builder =>
             {
-                
                 builder.AddBlobServiceClient(new Uri(Environment.GetEnvironmentVariable("AZURE_STORAGE_BLOB_URL")))
                     .ConfigureOptions((options, provider) =>
                     {
@@ -42,7 +39,6 @@ namespace mvpsdkdemoapi
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage();

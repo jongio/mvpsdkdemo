@@ -1,16 +1,12 @@
 ﻿using System;
 using System.IO;
-
 using System.Text;
-
 using System.Threading.Tasks;
-
 using Azure.Core;
 using Azure.Core.Pipeline;
 using Azure.Identity;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using DotNetEnv;
 
 namespace mvpsdkdemoconsole
 {
@@ -18,9 +14,6 @@ namespace mvpsdkdemoconsole
     {
         static async Task Main(string[] args)
         {
-            // Load the .env file environment variables
-            Env.Load();
-
             // Set blob client options for more retries:
             var options = new BlobClientOptions()
             {
@@ -37,7 +30,7 @@ namespace mvpsdkdemoconsole
             options.AddPolicy(new SimpleTracingPolicy(), HttpPipelinePosition.PerCall);
 
             // Get storage account blob url from settings
-            var blobServiceUri = new Uri(Environment.GetEnvironmentVariable("AZURE_STORAGE_BLOB_URL"));
+            var blobServiceUri = new Uri("https://mvpsdkdemostorage.blob.core.windows.net/");
 
             // Create a BlobServiceClient to our Storage account using DefaultAzureCredentials & our HTTP pipeline options:
             var serviceClient = new BlobServiceClient(blobServiceUri, new DefaultAzureCredential(), options);
@@ -46,16 +39,22 @@ namespace mvpsdkdemoconsole
             var containerClient = serviceClient.GetBlobContainerClient("blobs");
             await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
 
-            // Upload a blob to container:
+            // Get the blob client:
             var blobClient = containerClient.GetBlobClient("blob.txt");
-            var blob = await blobClient.UploadAsync(new MemoryStream(Encoding.UTF8.GetBytes("https://aka.ms/azsdkmvps")), overwrite: true);
+
+            // Upload a blob to container:
+            var blob = await blobClient.UploadAsync(
+                new MemoryStream(Encoding.UTF8.GetBytes("Click here to view our Azure SDK MVPs: https://aka.ms/azsdkmvps")),
+                overwrite: true);
 
             // Download the blob
             var blobDownload = await blobClient.DownloadAsync();
             using var blobStreamReader = new StreamReader(blobDownload.Value.Content);
 
             // Write the blob contents
-            Console.WriteLine(blobStreamReader.ReadToEnd());
+            Console.WriteLine($"Content: {blobStreamReader.ReadToEnd()}");
+
+            Console.Read();
         }
     }
 
