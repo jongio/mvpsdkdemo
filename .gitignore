@@ -5,7 +5,7 @@ project.lock.json
 *.pyc
 
 # Visual Studio Code
-.vscode
+**/.vscode/settings.json
 
 # User-specific files
 *.suo
