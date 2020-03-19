@@ -80,6 +80,12 @@ The code reads the storage account name from an environment variable named `AZUR
 
     `az webapp config appsettings set -n {APP_NAME} --settings "AZURE_STORAGE_BLOB_URL"="{STORAGE_URL}"`
 
+### Turn on Logging
+
+1. Enable Application Logging - allows us to see our app logs in the log stream
+
+    `az webapp log config --application-logging true --level information --web-server-logging filesystem -n {APP_NAME} -o yaml`
+
 ## Code Setup
 
 ### Clone repo
@@ -131,7 +137,26 @@ The code reads the storage account name from an environment variable named `AZUR
 1. View the Output in Browser.
 1. View the Output in VS Code Output Console.
 1. Show that Azure CLI Credential was used.
+
+    You will see the following lines in the output:
+
+    ```cmd
+    info: Azure-Identity[1]
+        AzureCliCredential.GetToken invoked. Scopes: [ https://storage.azure.com/.default ] ParentRequestId: c7e8b2b7-a86d-4710-a10e-99f44eedb8bc
+    info: Azure-Identity[2]
+        AzureCliCredential.GetToken succeeded. Scopes: [ https://storage.azure.com/.default ] ParentRequestId: c7e8b2b7-a86d-4710-a10e-99f44eedb8bc ExpiresOn: 2020-03-18T23:12:27.2820620+00:00
+    info: Azure-Identity[2]
+        DefaultAzureCredential.GetToken succeeded. Scopes: [ https://storage.azure.com/.default ] ParentRequestId: c7e8b2b7-a86d-4710-a10e-99f44eedb8bc ExpiresOn: 2020-03-18T23:12:27.2820620+00:00
+    ```
+
 1. Show the custom pipeline log entries.
+
+    You will see the following lines in the output:
+
+    ```cmd
+    info: SimpleTracingPolicy[0]
+      >> Response: 206 from GET https://mvpsdkdemostorage.blob.core.windows.net/blobs/blob.txt
+    ```
 
 ### Deploy to Azure
 
@@ -151,3 +176,19 @@ The code reads the storage account name from an environment variable named `AZUR
 ### View the Log Stream
 
 1. Back to VS Code, go to the log stream and show that the policy logs are there and that Managed Identity was successfully used.
+
+    You will see the following lines for the custom policy:
+
+    ```cmd
+    2020-03-18 22:48:13.757 +00:00 [Information] SimpleTracingPolicy: >> Response: 206 from GET https://mvpsdkdemostorage.blob.core.windows.net/blobs/blob.txt
+    ```
+
+    You will see the following lines for Managed Identity:
+
+    ```cmd
+    2020-03-18 22:48:13.295 +00:00 [Information] Azure-Identity: ManagedIdentityCredential.GetToken succeeded. Scopes: [ https://storage.azure.com/.default ] ParentRequestId: 1fce14b9-720a-45a0-af21-146098f3ec25 ExpiresOn: 2020-03-19T01:49:40.0000000+00:00
+
+    2020-03-18 22:48:13.297 +00:00 [Information] Azure-Identity: DefaultAzureCredential.GetToken succeeded. Scopes: [ https://storage.azure.com/.default ] ParentRequestId: 1fce14b9-720a-45a0-af21-146098f3ec25 ExpiresOn: 2020-03-19T01:49:40.0000000+00:00
+    ```
+
+    If you do not see those lines, that means that you started the log streaming after the first request.  Since tokens are now obtained at the app level, you'll only see those Identity related messages once per app start, not once per request.
