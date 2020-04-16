@@ -30,7 +30,7 @@ namespace mvpsdkdemoapi.Controllers
 
             // Upload a blob to our container:
             var blobClient = containerClient.GetBlobClient("blob.txt");
-            var blob = await blobClient.UploadAsync(new MemoryStream(Encoding.UTF8.GetBytes("Click here to view our Azure SDK MVPs: https://aka.ms/azsdkmvps")), overwrite: true);
+            var blob = await blobClient.UploadAsync(new MemoryStream(Encoding.UTF8.GetBytes("Click here to view our Azure SDK MVPs: https://aka.ms/azsdk/mvps")), overwrite: true);
 
             // Return the blob contents:
             var blobDownload = await blobClient.DownloadAsync();

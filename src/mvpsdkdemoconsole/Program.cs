@@ -30,7 +30,7 @@ namespace mvpsdkdemoconsole
             options.AddPolicy(new SimpleTracingPolicy(), HttpPipelinePosition.PerCall);
 
             // Get storage account blob url from settings
-            var blobServiceUri = new Uri("https://mvpsdkdemostorage.blob.core.windows.net/");
+            var blobServiceUri = new Uri("https://mvpdemostorage1.blob.core.windows.net/");
 
             // Create a BlobServiceClient to our Storage account using DefaultAzureCredentials & our HTTP pipeline options:
             var serviceClient = new BlobServiceClient(blobServiceUri, new DefaultAzureCredential(), options);
@@ -44,7 +44,7 @@ namespace mvpsdkdemoconsole
 
             // Upload a blob to container:
             var blob = await blobClient.UploadAsync(
-                new MemoryStream(Encoding.UTF8.GetBytes("Click here to view our Azure SDK MVPs: https://aka.ms/azsdkmvps")),
+                new MemoryStream(Encoding.UTF8.GetBytes("Click here to view our Azure SDK MVPs: https://aka.ms/azsdk/mvps")),
                 overwrite: true);
 
             // Download the blob

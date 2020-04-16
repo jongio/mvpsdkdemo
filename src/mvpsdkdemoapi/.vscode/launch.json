@@ -19,7 +19,7 @@
       },
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "AZURE_STORAGE_BLOB_URL": "https://mvpsdkdemostorage.blob.core.windows.net/",
+        "AZURE_STORAGE_BLOB_URL": "https://mvpdemostorage1.blob.core.windows.net/",
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/Views"
